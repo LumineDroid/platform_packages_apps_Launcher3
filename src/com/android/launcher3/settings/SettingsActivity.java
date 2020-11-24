@@ -16,18 +16,10 @@
 
 package com.android.launcher3.settings;
 
-import static android.provider.Settings.Global.DEVELOPMENT_SETTINGS_ENABLED;
-
 import static androidx.preference.PreferenceFragmentCompat.ARG_PREFERENCE_ROOT;
-
-import static com.android.launcher3.BuildConfig.IS_STUDIO_BUILD;
-import static com.android.launcher3.InvariantDeviceProfile.TYPE_MULTI_DISPLAY;
-import static com.android.launcher3.InvariantDeviceProfile.TYPE_TABLET;
-import static com.android.launcher3.util.Executors.MAIN_EXECUTOR;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -36,7 +28,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 import androidx.core.view.WindowCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -50,14 +41,8 @@ import androidx.preference.PreferenceGroup.PreferencePositionCallback;
 import androidx.preference.PreferenceScreen;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.launcher3.BuildConfig;
-import com.android.launcher3.InvariantDeviceProfile;
 import com.android.launcher3.LauncherFiles;
 import com.android.launcher3.R;
-import com.android.launcher3.display.DisplayController;
-import com.android.launcher3.display.LauncherDisplayInfo;
-import com.android.launcher3.util.SafeCloseable;
-import com.android.launcher3.util.SettingsCache;
 
 import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
 
@@ -66,13 +51,6 @@ import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
  */
 public class SettingsActivity extends CollapsingToolbarBaseActivity
         implements OnPreferenceStartFragmentCallback, OnPreferenceStartScreenCallback {
-
-    @VisibleForTesting
-    static final String DEVELOPER_OPTIONS_KEY = "pref_developer_options";
-
-    public static final String FIXED_LANDSCAPE_MODE = "pref_fixed_landscape_mode";
-
-    private static final String NOTIFICATION_DOTS_PREFERENCE_KEY = "pref_icon_badging";
 
     public static final String EXTRA_FRAGMENT_ARGS = ":settings:fragment_args";
 
@@ -145,7 +123,7 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
     public boolean onPreferenceStartScreen(PreferenceFragmentCompat caller, PreferenceScreen pref) {
         Bundle args = new Bundle();
         args.putString(ARG_PREFERENCE_ROOT, pref.getKey());
-        return startPreference(getString(R.string.settings_fragment_name), args, pref.getKey());
+        return startPreference(getString(R.string.settings_title), args, pref.getKey());
     }
 
     @Override
@@ -162,10 +140,6 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
      */
     public static class LauncherSettingsFragment extends PreferenceFragmentCompat {
 
-        private @Nullable SafeCloseable mSettingCacheSafeCloseable;
-
-        protected boolean mDeveloperOptionsEnabled = false;
-
         private boolean mRestartOnResume = false;
 
         private String mHighLightKey;
@@ -174,20 +148,6 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
-            if (BuildConfig.IS_DEBUG_DEVICE) {
-                // Query DEVELOPMENT_SETTINGS_ENABLED and recreate activity if such setting
-                // has changed.
-                Uri devUri = Settings.Global.getUriFor(DEVELOPMENT_SETTINGS_ENABLED);
-                SettingsCache settingsCache = SettingsCache.INSTANCE.get(getContext());
-                mDeveloperOptionsEnabled = settingsCache.getValue(devUri);
-                mSettingCacheSafeCloseable = settingsCache.getListenableRef(devUri).forEach(
-                        MAIN_EXECUTOR, (v) -> {
-                            if (v != mDeveloperOptionsEnabled) {
-                                tryRecreateActivity();
-                            }
-                            return null;
-                        });
-            }
             super.onCreate(savedInstanceState);
         }
 
@@ -204,12 +164,6 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
             setPreferencesFromResource(R.xml.launcher_preferences, rootKey);
 
             PreferenceScreen screen = getPreferenceScreen();
-            for (int i = screen.getPreferenceCount() - 1; i >= 0; i--) {
-                Preference preference = screen.getPreference(i);
-                if (!initPreference(preference)) {
-                    screen.removePreference(preference);
-                }
-            }
 
             // If the target preference is not in the current preference screen, find the parent
             // preference screen that contains the target preference and set it as the preference
@@ -290,44 +244,6 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
             outState.putBoolean(SAVE_HIGHLIGHTED_KEY, mPreferenceHighlighted);
         }
 
-        /**
-         * Initializes a preference. This is called for every preference. Returning false here
-         * will remove that preference from the list.
-         */
-        protected boolean initPreference(Preference preference) {
-            LauncherDisplayInfo info = DisplayController.INSTANCE.get(getContext()).getInfo();
-            switch (preference.getKey()) {
-                case NOTIFICATION_DOTS_PREFERENCE_KEY:
-                    return BuildConfig.NOTIFICATION_DOTS_ENABLED;
-                case DEVELOPER_OPTIONS_KEY:
-                    if (IS_STUDIO_BUILD) {
-                        preference.setOrder(0);
-                    }
-                    return mDeveloperOptionsEnabled;
-                case FIXED_LANDSCAPE_MODE:
-                    if ((InvariantDeviceProfile.INSTANCE.get(getContext()).deviceType
-                                    == TYPE_MULTI_DISPLAY)
-                            || (InvariantDeviceProfile.INSTANCE.get(getContext()).deviceType
-                                    == TYPE_TABLET)) {
-                        return false;
-                    }
-                    // When the setting changes rotate the screen accordingly to showcase the result
-                    // of the setting
-                    preference.setOnPreferenceChangeListener(
-                            (pref, newValue) -> {
-                                getActivity().setRequestedOrientation(
-                                        (boolean) newValue
-                                                ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                                                : ActivityInfo.SCREEN_ORIENTATION_USER
-                                );
-                                return true;
-                            }
-                    );
-                    return !info.isLargeScreen(info.realBounds);
-            }
-            return true;
-        }
-
         @Override
         public void onResume() {
             super.onResume();
@@ -342,15 +258,6 @@ public class SettingsActivity extends CollapsingToolbarBaseActivity
 
             if (mRestartOnResume) {
                 recreateActivityNow();
-            }
-        }
-
-        @Override
-        public void onDestroy() {
-            super.onDestroy();
-            if (mSettingCacheSafeCloseable != null) {
-                mSettingCacheSafeCloseable.close();
-                mSettingCacheSafeCloseable = null;
             }
         }
 
