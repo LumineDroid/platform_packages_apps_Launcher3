@@ -26,7 +26,7 @@ import android.os.Build;
 
 import androidx.annotation.NonNull;
 
-import com.android.internal.util.luminedroid.Luminetils;
+import com.android.internal.util.luminedroid.LumineUtils;
 import com.android.launcher3.lineage.trust.db.TrustComponent;
 
 import java.util.ArrayList;
@@ -73,8 +73,10 @@ public class LoadTrustComponentsTask extends AsyncTask<Void, Integer, List<Trust
             PackageInfo app = apps.get(i);
             try {
                 String pkgName = app.packageName;
-                if (!app.applicationInfo.isSystemApp() || launchablePackages.contains(pkgName) ||
-                        whiteListedPackages.contains(pkgName)) {
+                if ((!app.applicationInfo.isSystemApp() || launchablePackages.contains(pkgName) ||
+                        whiteListedPackages.contains(pkgName)) &&
+                        mPackageManager.getLaunchIntentForPackage(pkgName) != null) {
+
                     String label = mPackageManager.getApplicationLabel(
                             mPackageManager.getApplicationInfo(pkgName,
                                     PackageManager.GET_META_DATA)).toString();
