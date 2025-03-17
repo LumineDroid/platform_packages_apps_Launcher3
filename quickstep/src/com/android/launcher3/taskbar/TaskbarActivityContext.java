@@ -240,6 +240,7 @@ public class TaskbarActivityContext extends BaseTaskbarContext {
             Settings.System.NAVIGATION_BAR_HINT);
     private static final Uri URI_NAVBAR_LAYOUT_MODE = Secure.getUriFor(Secure.NAVBAR_LAYOUT_MODE);
     private static final Uri URI_NAVBAR_LENGTH_MODE = System.getUriFor(System.GESTURE_NAVBAR_LENGTH_MODE);
+    private static final Uri URI_NAVBAR_HEIGHT_MODE = System.getUriFor(System.GESTURE_NAVBAR_HEIGHT_MODE);
 
     private static final String TAG = "TaskbarActivityContext";
 
@@ -300,6 +301,7 @@ public class TaskbarActivityContext extends BaseTaskbarContext {
     private final boolean mIsNavbarHintEnabled;
     private final int mNavbarLayoutMode;
     private final int mNavbarLengthMode;
+    private final int mNavbarHeightMode;
 
     private boolean mIsDestroyed = false;
 
@@ -367,6 +369,7 @@ public class TaskbarActivityContext extends BaseTaskbarContext {
         mIsNavbarHintEnabled = settingsCache.getValue(URI_NAVIGATION_BAR_HINT);
         mNavbarLayoutMode = settingsCache.getIntValue(URI_NAVBAR_LAYOUT_MODE);
         mNavbarLengthMode = settingsCache.getIntValue(URI_NAVBAR_LENGTH_MODE, 1);
+        mNavbarHeightMode = settingsCache.getIntValue(URI_NAVBAR_HEIGHT_MODE, 3);
         mBubbleFeatureConfig =
                 new BubbleFeatureConfigImpl(mWindowContext, getDesktopState(mWindowContext));
 
@@ -2497,6 +2500,10 @@ public class TaskbarActivityContext extends BaseTaskbarContext {
 
     public int getNavbarLengthMode() {
         return mNavbarLengthMode;
+    }
+
+    public int getNavbarHeightMode() {
+        return mNavbarHeightMode;
     }
 
     /**
