@@ -25,6 +25,7 @@ import static com.android.launcher3.folder.ClippedFolderIconLayoutRule.MAX_NUM_I
 import static com.android.launcher3.folder.FolderIcon.DROP_IN_ANIMATION_DURATION;
 import static com.android.launcher3.graphics.PreloadIconDelegate.newPendingIcon;
 import static com.android.launcher3.icons.BitmapInfo.FLAG_THEMED;
+import static com.android.launcher3.util.Executors.MAIN_EXECUTOR;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -454,7 +455,16 @@ public class PreviewItemManager {
             PreviewItemDrawingParams p, ItemInfo item, boolean loadHighResIcon) {
         if (item instanceof WorkspaceItemInfo wii) {
             if (wii.shouldShowPendingIcon()) {
-                p.drawable = newPendingIcon(wii, mContext, FLAG_THEMED);
+                MAIN_EXECUTOR.getHandler().post(() -> {
+                    Drawable drawable = newPendingIcon(wii, mContext, FLAG_THEMED);
+                    if (drawable != null) {
+                        drawable.setBounds(0, 0, mIconSize, mIconSize);
+                        drawable.setCallback(mIcon);
+                        p.drawable = drawable;
+                        p.item = item;
+                    }
+                });
+                return;
             } else {
                 p.drawable = wii.newIcon(mContext, FLAG_THEMED);
             }
