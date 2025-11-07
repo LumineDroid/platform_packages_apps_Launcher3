@@ -50,6 +50,7 @@ import com.android.launcher3.LauncherPrefs;
 import com.android.launcher3.R;
 import com.android.launcher3.Utilities;
 import com.android.launcher3.util.SettingsCache;
+import com.android.launcher3.util.VibratorWrapper;
 
 import com.android.settingslib.collapsingtoolbar.CollapsingToolbarBaseActivity;
 import com.android.settingslib.widget.SettingsBasePreferenceFragment;
@@ -192,6 +193,7 @@ public class SettingsHomescreen extends CollapsingToolbarBaseActivity
 
         private Preference mShowGoogleAppPref;
         private Preference mShowGoogleBarPref;
+        private Preference mD2SHaptic;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -216,6 +218,11 @@ public class SettingsHomescreen extends CollapsingToolbarBaseActivity
             mShowGoogleBarPref = screen.findPreference(LauncherPrefs.DOCK_SEARCH.getSharedPrefKey());
 
             updateIsGoogleAppEnabled();
+
+            mD2SHaptic = screen.findPreference(LauncherPrefs.SLEEP_GESTURE_HAPTIC.getSharedPrefKey());
+            if (!VibratorWrapper.INSTANCE.get(getContext()).hasVibrator()) {
+                screen.removePreference(mD2SHaptic);
+            }
 
             // If the target preference is not in the current preference screen, find the parent
             // preference screen that contains the target preference and set it as the preference
