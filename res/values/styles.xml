@@ -192,7 +192,7 @@
         <item name="folderBackgroundColor">@color/customColorSurfaceEffect0Fallback</item>
     </style>
 
-    <style name="HomeSettings.Theme" parent="@android:style/Theme.DeviceDefault.Settings">
+    <style name="HomeSettings.Theme" parent="@style/Theme.SubSettingsBase.Expressive">
         <item name="android:navigationBarColor">?android:colorPrimaryDark</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
