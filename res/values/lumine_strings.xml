@@ -54,6 +54,11 @@
     <string name="title_drawer_labels">Drawer labels</string>
     <string name="summary_drawer_labels">Show icon labels in drawer</string>
 
+    <!-- Notification badge counts -->
+    <string name="notification_badge_counts_title">Notification count</string>
+    <string name="notification_badge_counts_summary">Show unread count on app icons instead of dots</string>
+    <string name="notification_badge_counts_disabled_summary">Enable notification dots first</string>
+
     <!-- All apps themed icons -->
     <string name="pref_themed_icons_title">Use themed icons in drawer</string>
     <string name="pref_themed_icons_summary">Follow themed icons used on home screen</string>
