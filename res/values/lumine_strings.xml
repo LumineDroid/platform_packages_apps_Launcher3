@@ -437,4 +437,8 @@
     <!-- Auto-hide page indicator dots -->
     <string name="auto_hide_dots">Auto-hide page indicator</string>
     <string name="auto_hide_dots_summary">Hide the page indicator dots automatically</string>
+
+    <!-- Pixel style search bar -->
+    <string name="dock_search_pixel_style_title">Pixel style search bar</string>
+    <string name="dock_search_pixel_style_summary">Revamped search bar with layered background</string>
 </resources>
