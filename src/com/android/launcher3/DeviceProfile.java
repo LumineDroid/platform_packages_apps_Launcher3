@@ -659,7 +659,7 @@ public class DeviceProfile {
      */
     public int getMaxAllAppsRowCount() {
         return (int) (Math.ceil((mDeviceProperties.getAvailableHeightPx() - allAppsPadding.top)
-                / ((float) getAllAppsProfile().getCellHeightPx() * allAppsCellHeightMultiplier)));
+                / ((float) getAllAppsProfile().getCellHeightPx())));
     }
 
     /**
@@ -906,16 +906,15 @@ public class DeviceProfile {
             int cellHeight = (int) (cellWidth * allAppsCellHeightMultiplier);
 
             mAllAppsProfile = getAllAppsProfile().copyWithCellHeightPx(cellHeight);
-        }
-
-        if (LauncherPrefs.ENABLE_TWOLINE_ALLAPPS_TOGGLE.get(context)
-                && allAppsIconText
-                && !(mIsResponsiveGrid && getAllAppsProfile().getMaxAllAppsTextLineCount() == 2)) {
-            // Add extra textHeight to the existing allAppsCellHeight.
-            mAllAppsProfile = getAllAppsProfile().copyWithCellHeightPx(
-                    (int) ((float) getAllAppsProfile().getCellHeightPx() * allAppsCellHeightMultiplier)
-                    + Utilities.calculateTextHeight( getAllAppsProfile().getIconTextSizePx())
-            );
+        } else {
+            int cellHeight = (int) ((float) getAllAppsProfile().getCellHeightPx()
+                    * allAppsCellHeightMultiplier);
+            if (LauncherPrefs.ENABLE_TWOLINE_ALLAPPS_TOGGLE.get(context)
+                    && !(mIsResponsiveGrid && getAllAppsProfile().getMaxAllAppsTextLineCount() == 2)) {
+                // Add extra textHeight to the existing allAppsCellHeight.
+                cellHeight += Utilities.calculateTextHeight(getAllAppsProfile().getIconTextSizePx());
+            }
+            mAllAppsProfile = getAllAppsProfile().copyWithCellHeightPx(cellHeight);
         }
 
         updateHotseatSizes(getWorkspaceIconProfile().getIconSizePx());
