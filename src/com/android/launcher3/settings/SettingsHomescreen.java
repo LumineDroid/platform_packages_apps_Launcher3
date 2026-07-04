@@ -46,6 +46,9 @@ public class SettingsHomescreen extends SettingsCategoryActivity {
             if (LauncherPrefs.ENABLE_MINUS_ONE.getSharedPrefKey().equals(preference.getKey())) {
                 return LumineUtils.isPackageEnabled(getContext(), SEARCH_PACKAGE);
             }
+            if (LauncherPrefs.SHOW_HOTSEAT_QSB.getSharedPrefKey().equals(preference.getKey())) {
+                return LumineUtils.isPackageEnabled(getContext(), SEARCH_PACKAGE);
+            }
             return super.initPreference(preference);
         }
     }

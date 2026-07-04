@@ -47,6 +47,14 @@
     <PreferenceCategory
         android:title="@string/interface_category_title">
 
+        <SwitchPreferenceCompat
+            android:key="pref_show_hotseat_qsb"
+            android:title="@string/pref_show_hotseat_qsb_title"
+            android:summary="@string/pref_show_hotseat_qsb_summary"
+            android:defaultValue="false"
+            android:persistent="true"
+            launcher:iconSpaceReserved="false" />
+
         <!--
           LAUNCHER_GOOGLE_APP_SWIPE_LEFT_ENABLED(617)
           LAUNCHER_GOOGLE_APP_SWIPE_LEFT_DISABLED(618)
