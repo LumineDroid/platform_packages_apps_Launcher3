@@ -202,11 +202,11 @@ public class AppsSearchContainerLayout extends ExtendedEditText
 
     @Override
     public void setInsets(Rect insets) {
-        DeviceProfile dp = mLauncher.getDeviceProfile();
         MarginLayoutParams mlp = (MarginLayoutParams) getLayoutParams();
-        mlp.topMargin = !dp.getDeviceProperties().isLargeScreen() ? insets.top : mContentOverlap + 
-                getResources().getDimensionPixelSize(R.dimen.all_apps_search_bar_bottom_adjustment)
-                - getResources().getDimensionPixelSize(R.dimen.all_apps_search_top_row_extra_height);
+        if (mAppsView.getSearchUiDelegate().isSearchBarFloating()
+                || mLauncher.getDeviceProfile().getDeviceProperties().isLargeScreen()) {
+            mlp.topMargin = insets.top;
+        }
         requestLayout();
     }
 
