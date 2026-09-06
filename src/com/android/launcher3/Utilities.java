@@ -959,4 +959,11 @@ public final class Utilities {
     public static boolean isGSAEnabled(Context context) {
         return LumineUtils.isPackageEnabled(context, GSA_PACKAGE);
     }
+
+    public static int getBlurRadius(Context context) {
+        return LauncherPrefs.getPrefs(context.getApplicationContext()).getInt(
+                LauncherPrefs.BLUR_DEPTH.getSharedPrefKey(),
+                context.getResources().getDimensionPixelSize(
+                        R.dimen.max_depth_blur_radius_enhanced));
+    }
 }
