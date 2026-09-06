@@ -237,4 +237,8 @@
     <!-- Smartspace -->
     <string name="smartspace_pref_title">At a Glance</string>
     <string name="smartspace_pref_summary">Show smartspace at the top of the home screen</string>
+
+    <!-- Two-line labels in app drawer -->
+    <string name="two_line_labels_title">Two-line labels</string>
+    <string name="two_line_labels_summary">Allow long app names to wrap to two lines in the drawer</string>
 </resources>
