@@ -282,6 +282,7 @@ constructor(@ApplicationContext private val encryptedContext: Context) {
         @JvmField val SHOW_HOTSEAT_BG = backedUpItem("pref_show_hotseat_bg", false)
         @JvmField val SHOW_STATUS_BAR = backedUpItem("pref_show_statusbar", true)
         @JvmField val SINGLE_PAGE_CENTER = backedUpItem("pref_single_page_center", false)
+        @JvmField val SHOW_SMARTSPACE = backedUpItem("pref_smartspace", true)
         @JvmField val WALLPAPER_SCROLLING = backedUpItem("pref_allow_wallpaper_scrolling", true)
         @JvmField val ALLAPPS_THEMED_ICONS = backedUpItem("pref_allapps_themed_icons", false)
         @JvmField val DRAWER_OPEN_KEYBOARD = backedUpItem("pref_drawer_open_keyboard", false)

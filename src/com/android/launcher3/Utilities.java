@@ -975,8 +975,14 @@ public final class Utilities {
         return LauncherPrefs.RECENTS_OPACITY.get(context) * 255 / 100;
     }
 
+    public static final String KEY_SMARTSPACE = "pref_smartspace";
+
     public static int getAllAppsAlpha(Context context) {
         return LauncherPrefs.APP_DRAWER_OPACITY.get(context) * 255 / 100;
+    }
+
+    public static boolean showSmartspace(Context context) {
+        return LauncherPrefs.SHOW_SMARTSPACE.get(context);
     }
 
     private static final String FREEFORM_PACKAGE = "com.libremobileos.freeform";

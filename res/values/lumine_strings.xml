@@ -233,4 +233,8 @@
     <!-- Auto-hide page indicator dots -->
     <string name="auto_hide_dots">Auto-hide page indicator</string>
     <string name="auto_hide_dots_summary">Hide the page indicator dots automatically</string>
+
+    <!-- Smartspace -->
+    <string name="smartspace_pref_title">At a Glance</string>
+    <string name="smartspace_pref_summary">Show smartspace at the top of the home screen</string>
 </resources>

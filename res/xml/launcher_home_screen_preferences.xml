@@ -92,6 +92,14 @@
         android:title="@string/interface_category_title">
 
         <SwitchPreferenceCompat
+            android:key="pref_smartspace"
+            android:title="@string/smartspace_pref_title"
+            android:summary="@string/smartspace_pref_summary"
+            android:defaultValue="true"
+            android:persistent="true"
+            launcher:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
             android:key="pref_show_hotseat_qsb"
             android:title="@string/pref_show_hotseat_qsb_title"
             android:summary="@string/pref_show_hotseat_qsb_summary"

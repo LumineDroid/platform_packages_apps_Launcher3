@@ -76,6 +76,7 @@ public class SettingsHomescreen extends SettingsCategoryActivity {
                     || LauncherPrefs.SHOW_STATUS_BAR.getSharedPrefKey().equals(key)
                     || LauncherPrefs.SHORT_PARALLAX.getSharedPrefKey().equals(key)
                     || LauncherPrefs.SINGLE_PAGE_CENTER.getSharedPrefKey().equals(key)
+                    || LauncherPrefs.SHOW_SMARTSPACE.getSharedPrefKey().equals(key)
                     || LauncherPrefs.AUTO_HIDE_DOTS.getSharedPrefKey().equals(key)) {
                 LauncherAppState.INSTANCE.get(getContext()).setNeedsRestart();
             }

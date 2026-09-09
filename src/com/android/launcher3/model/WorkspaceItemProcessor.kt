@@ -67,6 +67,8 @@ import com.android.launcher3.util.ApplicationInfoWrapper
 import com.android.launcher3.util.IntSparseArrayMap
 import com.android.launcher3.util.PackageManagerHelper
 import com.android.launcher3.util.PackageUserKey
+import com.android.launcher3.Utilities
+import com.android.launcher3.qsb.SmartspaceCustomWidget
 import com.android.launcher3.widget.LauncherAppWidgetProviderInfo
 import com.android.launcher3.widget.WidgetInflater
 import com.android.launcher3.widget.util.WidgetSizeHandler
@@ -523,6 +525,14 @@ class WorkspaceItemProcessor(
      */
     private fun processWidget() {
         val component = ComponentName.unflattenFromString(c.appWidgetProvider!!)!!
+        if (
+            component.packageName == LauncherAppWidgetProviderInfo.CUSTOM_WIDGET_PACKAGE &&
+                component.className == SmartspaceCustomWidget.id &&
+                !Utilities.showSmartspace(context)
+        ) {
+            // The row stays in the database, so switching the pref back on restores it.
+            return
+        }
         val appWidgetInfo = LauncherAppWidgetInfo(c.appWidgetId, component)
         c.applyCommonProperties(appWidgetInfo)
         appWidgetInfo.spanX = c.spanX
